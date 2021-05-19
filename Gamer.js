@@ -26,8 +26,6 @@ class Gamer {
   #health;
   #damage;
 
-  static tracedAction = ["move", "damage"];
-
   get id() {
     return this.#id;
   }
@@ -59,6 +57,8 @@ class Gamer {
   set y(y) {
     this.#y = y;
   }
+
+  static tracedAction = ["move", "damage"];
 
   canMove(place) {
     return place?.id === 0;

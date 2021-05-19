@@ -4,33 +4,49 @@ class GameField extends Game {
     this.fieldSize = fieldSize || 16;
     this.#gamers = gamers;
     this.writeHistory = (...agrs) => super.writeHistory(...agrs);
-    this.getField = this.getField.bind(this);
-    this.getGamers = this.getGamers.bind(this);
-    this.setField = this.setField.bind(this);
-    this.setGamers = this.setGamers.bind(this);
+    this.prepareToGame = this.prepareToGame.bind(this);
   }
-  
+
   #field = [];
   #gamers = [];
 
+  get field() {
+    const field = JSON.parse(JSON.stringify(this.#field));
+    this.gamers.forEach((gamer) => {
+      field[gamer.x][gamer.y].id = gamer.id;
+    });
+    return field;
+  }
+
+  get gamers() {
+    return this.#gamers;
+  }
+
+  set field(field) {
+    this.#field = field;
+  }
+
+  set gamers(gamers) {
+    this.#gamers = gamers;
+  }
+
   static proxyHandler = {
     construct(Target, args) {
-      console.log("Target", Target);
-      return new Proxy(new Target(...args), {
+      return new Proxy(Reflect.construct(Target, args), {
         get(Target, prop, receiver) {
-          console.log("prop", prop);
           const val = Target[prop];
           if (typeof val === "function") {
             return function (...args) {
-              console.log(Gamer.tracedAction.includes(prop));
               if (
                 Gamer.tracedAction.includes(prop) &&
-                !writeHistory(Target, prop, args)
+                !this.writeHistory(this.getGamer(args[0]), prop, args)
               )
                 return false;
-              this.render();
-              console.log(1);
-              return val.apply(this, args);
+              if (Gamer.tracedAction.includes(prop))
+                setTimeout(() => {
+                  this.render();
+                }, 1);
+              return val.apply(Target, args);
             };
           } else {
             return val;
@@ -42,32 +58,8 @@ class GameField extends Game {
 
   render() {
     const root = document.getElementById("root");
-    console.log("root", root);
-    root.innerHTML = "Hello Dolly.";
-  }
-
-  get field() {
-    const field = JSON.parse(JSON.stringify(this.getField()));
-    this.getGamers().forEach((gamer) => {
-      field[gamer.x][gamer.y].id = gamer.id;
-    });
-    return field;
-  }
-
-  getGamers() {
-    return this.#gamers;
-  }
-
-  setGamers(gamers) {
-    this.#gamers = gamers;
-  }
-
-  getField() {
-    return this.#field;
-  }
-
-  setField(field) {
-    this.#field = field;
+    root.style.width = "325px";
+    root.innerHTML = JSON.stringify(this.field).slice(1, -1);
   }
 
   move(id, direction) {
@@ -113,31 +105,25 @@ class GameField extends Game {
   }
 
   createField() {
-    this.setField(
-      JSON.parse(
-        JSON.stringify(
-          new Array(this.fieldSize).fill([
-            ...new Array(this.fieldSize).fill({ id: 0 }),
-          ])
-        )
+    this.field = JSON.parse(
+      JSON.stringify(
+        new Array(this.fieldSize).fill([
+          ...new Array(this.fieldSize).fill({ id: 0 }),
+        ])
       )
     );
   }
 
   createGamers() {
-    // const writeHistory = this.writeHistory;
-    this.setGamers(
-      this.getGamers().map((Gamer, index) => {
-        const getRand = () => index;
-        // Math.floor(Math.random() * this.fieldSize);
-        const gamer = new Gamer(index + 1, getRand(), getRand());
-        return gamer;
-      })
-    );
+    this.gamers = this.gamers.map((Gamer, index) => {
+      const getRand = () => index;
+      // Math.floor(Math.random() * this.fieldSize);
+      return new Gamer(index + 1, getRand(), getRand());
+    });
   }
 
   getGamer(id) {
-    return this.getGamers().find((gamer) => gamer.id === id);
+    return this.gamers.find((gamer) => gamer.id === id);
   }
 
   getVeiwGamer(id) {

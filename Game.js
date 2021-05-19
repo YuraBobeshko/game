@@ -19,7 +19,6 @@ class Game {
   }
 
   writeHistory(who, action, whom) {
-    console.log("action", action);
     const count = this.#history[this.#step].log.filter(
       (item) => item.who.id === who.id && item.action === action
     ).length;
