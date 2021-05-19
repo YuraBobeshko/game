@@ -12,15 +12,15 @@ first.prepareToGame();
 // console.log(gamerFirst);
 // const gamerSecond = first.getGamer(2);
 // first.GameField.findPosition(1);
-console.log(first.field);
-// console.log(gamerFirst)
-first.move(1, "right");
-console.log(first.field);
-first.move(1, "down");
-console.log(first.field);
-first.move(2, "right");
-console.log(first.field);
-// console.log(first.history);
+// console.log(first.field);
+// // console.log(gamerFirst)
+// first.move(1, "right");
+// console.log(first.field);
+// first.move(1, "down");
+// console.log(first.field);
+// first.move(2, "right");
+// console.log(first.field);
+// // console.log(first.history);
 
 // gamerFirst.move("right");
 // console.log(first.field);
@@ -47,3 +47,33 @@ console.log(first.field);
 
 // gamerSecond.move( "up");
 // console.log(first.field);
+
+document.addEventListener("keydown", function (event) {
+  if (event.code == "Space") {
+    first.startGame();
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.code == "ArrowRight") {
+    first.move(1, "right");
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.code == "ArrowLeft") {
+    first.move(1, "left");
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.code == "ArrowUp") {
+    first.move(1, "up");
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.code == "ArrowDown") {
+    first.move(1, "down");
+  }
+});

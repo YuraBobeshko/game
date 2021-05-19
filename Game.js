@@ -10,11 +10,15 @@ class Game {
   startGame() {
     this.#history.push({ step: 0, log: [] });
     console.log(this.#history);
+    const root = document.getElementById("time");
 
+    root.innerHTML = this.#step;
     setInterval(() => {
       this.#step++;
       this.#history.push({ step: this.#step, log: [] });
       console.log(this.#history);
+
+      root.innerHTML = this.#step;
     }, this.#iteration);
   }
 

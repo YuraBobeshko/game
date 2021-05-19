@@ -13,7 +13,7 @@ class GameField extends Game {
   get field() {
     const field = JSON.parse(JSON.stringify(this.#field));
     this.gamers.forEach((gamer) => {
-      field[gamer.x][gamer.y].id = gamer.id;
+      field[gamer.x][gamer.y] = { id: gamer.id, health: gamer.health };
     });
     return field;
   }
@@ -58,7 +58,8 @@ class GameField extends Game {
 
   render() {
     const root = document.getElementById("root");
-    root.style.width = "325px";
+    root.style.width = "800px";
+
     root.innerHTML = JSON.stringify(this.field).slice(1, -1);
   }
 
@@ -108,7 +109,7 @@ class GameField extends Game {
     this.field = JSON.parse(
       JSON.stringify(
         new Array(this.fieldSize).fill([
-          ...new Array(this.fieldSize).fill({ id: 0 }),
+          ...new Array(this.fieldSize).fill({ id: 0, health: "0" }),
         ])
       )
     );
@@ -163,5 +164,6 @@ class GameField extends Game {
   prepareToGame() {
     this.createField();
     this.createGamers();
+    this.render();
   }
 }
