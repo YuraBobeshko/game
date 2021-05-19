@@ -1,8 +1,8 @@
 class Game {
   #iteration = 4000;
   #step = 0;
-
   #history = [{ log: [] }];
+
   get history() {
     return this.#history;
   }

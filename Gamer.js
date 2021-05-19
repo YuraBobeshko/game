@@ -69,9 +69,12 @@ class Gamer {
   }
 
   setPosition(x, y, place) {
-    if (!this.canMove(place)) return false;
-
-    this.#x = x;
-    this.#y = y;
+    if (!this.canMove(place)) {
+      return false;
+    } else {
+      this.#x = x;
+      this.#y = y;
+      return true;
+    }
   }
 }
