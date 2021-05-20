@@ -123,6 +123,50 @@ class GameField extends Game {
     });
   }
 
+  createFuntcionsControle() {
+    document.addEventListener("keydown", function (event) {
+      if (event.code == "Space" || console.log(event.code)) {
+        first.startGame();
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.code == "ArrowRight") {
+        first.move(1, "right");
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.code == "ArrowLeft") {
+        first.move(1, "left");
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.code == "ArrowUp") {
+        first.move(1, "up");
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.code == "ArrowDown") {
+        first.move(1, "down");
+      }
+    });
+
+    function createFuntcion(id) {
+      document.addEventListener("keydown", function (event) {
+        if (event.code == "Digit" + id) {
+          first.damage(1, id);
+        }
+      });
+    }
+
+    this.gamers.forEach((gamer) => {
+      createFuntcion(gamer.id);
+    });
+  }
+
   getGamer(id) {
     return this.gamers.find((gamer) => gamer.id === id);
   }
@@ -164,6 +208,7 @@ class GameField extends Game {
   prepareToGame() {
     this.createField();
     this.createGamers();
+    this.createFuntcionsControle();
     this.render();
   }
 }
