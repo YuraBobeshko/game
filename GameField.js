@@ -1,7 +1,6 @@
 class GameField extends Game {
-  constructor(fieldSize, gamers) {
+  constructor(gamers) {
     super();
-    this.fieldSize = fieldSize || 16;
     this.#gamers = gamers;
     this.writeHistory = (...agrs) => super.writeHistory(...agrs);
     this.prepareToGame = this.prepareToGame.bind(this);
@@ -105,20 +104,20 @@ class GameField extends Game {
     damaged.makeDamage(damager.damage);
   }
 
-  createField() {
+  createField(fieldSize) {
     this.field = JSON.parse(
       JSON.stringify(
-        new Array(this.fieldSize).fill([
-          ...new Array(this.fieldSize).fill({ id: 0, health: "0" }),
+        new Array(fieldSize).fill([
+          ...new Array(fieldSize).fill({ id: 0, health: "0" }),
         ])
       )
     );
   }
 
-  createGamers() {
+  createGamers(fieldSize) {
     this.gamers = this.gamers.map((Gamer, index) => {
       const getRand = () => index;
-      // Math.floor(Math.random() * this.fieldSize);
+      // Math.floor(Math.random() * fieldSize);
       return new Gamer(index + 1, getRand(), getRand());
     });
   }
@@ -205,9 +204,9 @@ class GameField extends Game {
     return { x, y };
   }
 
-  prepareToGame() {
-    this.createField();
-    this.createGamers();
+  prepareToGame(fieldSize) {
+    this.createField(fieldSize);
+    this.createGamers(fieldSize);
     this.createFuntcionsControle();
     this.render();
   }
